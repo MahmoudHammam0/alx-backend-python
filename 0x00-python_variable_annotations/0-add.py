@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-"Basic annotations module"
+""" Basic annotations module """
 
 
 def add(a: float, b: float) -> float:
-    "type-annotated function takes float a and float b and returns their sum"
+    """ function takes float a and float b and returns their sum float """
     return a + b
