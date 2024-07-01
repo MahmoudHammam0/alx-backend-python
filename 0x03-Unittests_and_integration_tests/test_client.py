@@ -42,49 +42,17 @@ class TestGithubOrgClient(unittest.TestCase):
         """ test public_repos method """
         mock_resp = Mock()
         payload = {
-            'repos_url': "https://api.github.com/users/google/repos",
-            'repos': [
-                {
-                    "id": 7697149,
-                    "name": "episodes.dart",
-                    "private": False,
-                    "owner": {
-                        "login": "google",
-                        "id": 1342004,
-                    },
-                    "fork": False,
-                    "url": "https://api.github.com/repos/google/episodes.dart",
-                    "created_at": "2013-01-19T00:31:37Z",
-                    "updated_at": "2019-09-23T11:53:58Z",
-                    "has_issues": True,
-                    "forks": 22,
-                    "default_branch": "master",
-                },
-                {
-                    "id": 8566972,
-                    "name": "kratu",
-                    "private": False,
-                    "owner": {
-                        "login": "google",
-                        "id": 1342004,
-                    },
-                    "fork": False,
-                    "url": "https://api.github.com/repos/google/kratu",
-                    "created_at": "2013-03-04T22:52:33Z",
-                    "updated_at": "2019-11-15T22:22:16Z",
-                    "has_issues": True,
-                    "forks": 32,
-                    "default_branch": "master",
-                },
-            ]
-        }
+            'repos_url': "test_url",
+            'repos': [{"name": "repo1"}, {"name": "repo2",}]
+            }
         mock_resp.json.return_value = payload['repos']
         mock_request.return_value = mock_resp
 
         with patch.object(GithubOrgClient, '_public_repos_url',
                           new_callable=PropertyMock) as mock_repos:
             mock_repos.return_value = payload["repos_url"]
-            self.assertEqual(GithubOrgClient("google").public_repos(),
-                             ["episodes.dart", "kratu"])
+            obj = GithubOrgClient("org")
+            self.assertEqual(obj.public_repos, ["repo1", "repo2"])
             mock_repos.assert_called_once()
+
         mock_request.assert_called_once()
