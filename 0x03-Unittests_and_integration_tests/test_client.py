@@ -3,7 +3,7 @@
 import unittest
 from unittest.mock import Mock, patch, PropertyMock
 from client import GithubOrgClient
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 from fixtures import TEST_PAYLOAD
 
 
@@ -86,8 +86,8 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
 
         def get_payload(url):
             """ mock requests.get fail """
-            if url in route_payload:
-                return Mock(**{'json.return_value': route_payload[url]})
+            if url in payload:
+                return Mock(**{'json.return_value': payload[url]})
             return HTTPError
 
         cls.get_patcher = patch("requests.get", side_effect=get_payload)
