@@ -43,7 +43,7 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_resp = Mock()
         payload = {
             'repos_url': "test_url",
-            'repos': [{"name": "repo1"}, {"name": "repo2",}]
+            'repos': [{"name": "repo1"}, {"name": "repo2"}]
             }
         mock_resp.json.return_value = payload['repos']
         mock_request.return_value = mock_resp
@@ -52,7 +52,7 @@ class TestGithubOrgClient(unittest.TestCase):
                           new_callable=PropertyMock) as mock_repos:
             mock_repos.return_value = payload["repos_url"]
             obj = GithubOrgClient("org")
-            self.assertEqual(obj.public_repos, ["repo1", "repo2"])
+            self.assertEqual(obj.public_repos(), ["repo1", "repo2"])
             mock_repos.assert_called_once()
 
         mock_request.assert_called_once()
