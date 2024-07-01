@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Client test module """
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, PropertyMock
 from client import GithubOrgClient
 from parameterized import parameterized
 
@@ -25,3 +25,13 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get.assert_called_once()
 
         self.assertEqual(res, expected)
+
+    def test_public_repos_url(self):
+        """ test puplic repos method """
+        with patch.object(GithubOrgClient, 'org', new_callable=PropertyMock) as mock_org:
+            mock_org.return_value = {"payload": True, "repos_url": "123"}
+
+            client = GithubOrgClient('org')
+            res = client._public_repos_url
+
+            self.assertEqual(res, "123")
