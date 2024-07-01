@@ -28,7 +28,8 @@ class TestGithubOrgClient(unittest.TestCase):
 
     def test_public_repos_url(self):
         """ test puplic repos property """
-        with patch.object(GithubOrgClient, 'org', new_callable=PropertyMock) as mock_org:
+        with patch.object(GithubOrgClient, 'org',
+                          new_callable=PropertyMock) as mock_org:
             mock_org.return_value = {"payload": True, "repos_url": "123"}
 
             client = GithubOrgClient('org')
@@ -80,8 +81,10 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_resp.json.return_value = payload['repos']
         mock_request.return_value = mock_resp
 
-        with patch.object(GithubOrgClient, '_public_repos_url', new_callable=PropertyMock) as mock_repos:
+        with patch.object(GithubOrgClient, '_public_repos_url',
+                          new_callable=PropertyMock) as mock_repos:
             mock_repos.return_value = payload["repos_url"]
-            self.assertEqual(GithubOrgClient("google").public_repos(), ["episodes.dart", "kratu",])
+            self.assertEqual(GithubOrgClient("google").public_repos(),
+                             ["episodes.dart", "kratu"])
             mock_repos.assert_called_once()
         mock_request.assert_called_once()
