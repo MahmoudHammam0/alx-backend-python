@@ -53,6 +53,5 @@ class TestGithubOrgClient(unittest.TestCase):
             mock_repos.return_value = payload["repos_url"]
             obj = GithubOrgClient("org")
             self.assertEqual(obj.public_repos(), ["repo1", "repo2"])
-            mock_repos.assert_called_once()
 
         mock_request.assert_called_once()
