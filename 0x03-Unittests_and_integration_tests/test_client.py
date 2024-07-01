@@ -111,6 +111,5 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        """_summary_
-        """
+        """ teardown class method """
         cls.get_patcher.stop()
