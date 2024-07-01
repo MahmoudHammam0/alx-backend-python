@@ -84,30 +84,27 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
                 'https://api.github.com/orgs/google/repos': cls.repos_payload,
                 }
 
-        def get_payload(url):
-            """ mock requests.get fail """
+        def get_mock(url):
+            """ mock get """
             if url in payload:
                 return Mock(**{'json.return_value': payload[url]})
             return HTTPError
 
-        cls.get_patcher = patch("requests.get", side_effect=get_payload)
+        cls.get_patcher = patch("requests.get", side_effect=get_mock)
         cls.get_patcher.start()
 
-    def test_public_repos(self) -> None:
+    def test_public_repos(self):
         """ test expected res for puplic repos """
-        self.assertEqual(
-            GithubOrgClient("google").public_repos(),
-            self.expected_repos,
-        )
+        obj = GithubOrgClient("google")
+        self.assertEqual(obj.public_repos(), self.expected_repos)
 
-    def test_public_repos_with_license(self) -> None:
+    def test_public_repos_with_license(self):
         """ test puplic repo with license"""
-        self.assertEqual(
-            GithubOrgClient("google").public_repos(license="apache-2.0"),
-            self.apache2_repos,
-        )
+        obj = GithubOrgClient("google")
+        self.assertEqual(obj.public_repos(license="apache-2.0"),
+                         self.apache2_repos)
 
     @classmethod
-    def tearDownClass(cls) -> None:
+    def tearDownClass(cls):
         """ teardown class method """
         cls.get_patcher.stop()
